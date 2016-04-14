@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Change a Tweet Link to an Embedded Tweet</title>
+ 
+</head>
+<body>
+    <section id="CMSContent">
+        <h1>Change a Tweet Link to an Embedded Tweet</h1>
+        <p><a href="http://www.mikesmithdev.com/blog/embedding-a-tweet-in-a-cms-that-blocks-javascript/">View The Original Blog Post</a></p>
+        <p>You should run this on some type of web server to have everything render correctly.</p>
+        <p>Bacon ipsum dolor amet strip steak tongue jerky short ribs, shoulder pancetta cow prosciutto. Pork belly beef drumstick ribeye leberkas pork loin corned beef. Hamburger ground round ham hock turkey meatloaf leberkas pork chop pastrami cupim fatback t-bone. Spare ribs frankfurter chicken sausage drumstick meatloaf venison ham hock ribeye picanha meatball leberkas pork chop doner. Turkey tail pancetta, doner ham strip steak beef ribs sausage cupim fatback leberkas sirloin boudin.</p>
+        <a href="https://twitter.com/MikeSmithDev/status/591968386764050434"></a>
+        <p>Brisket flank beef doner turkey, ball tip ribeye jowl pancetta pastrami meatloaf tri-tip meatball frankfurter leberkas. Tail corned beef pork, swine short loin biltong sirloin pork chop cupim ball tip chicken beef brisket spare ribs chuck. Sirloin ham hock strip steak pork venison t-bone landjaeger salami cow shank ball tip prosciutto. Pastrami shoulder capicola, tenderloin jowl brisket short loin porchetta sausage. Shankle pork belly kielbasa spare ribs, meatball leberkas t-bone pancetta turducken ham hock tri-tip drumstick. Jowl picanha bacon strip steak ham meatloaf frankfurter cupim hamburger cow pork chop biltong tongue. Chuck rump boudin kevin bacon pork belly venison leberkas beef ribs doner sausage pork chop beef ball tip cow.</p>
+        <a href="https://twitter.com/MikeSmithDev/status/709551472845791232"></a>
+        <p>Meatball doner andouille ball tip, jerky tongue short ribs rump biltong jowl frankfurter kevin short loin turkey leberkas. Boudin alcatra meatloaf hamburger porchetta, cupim kielbasa venison bresaola shankle landjaeger beef short loin bacon biltong. Leberkas biltong shankle ham hock brisket kevin sausage rump turducken alcatra spare ribs tenderloin cupim landjaeger. Hamburger strip steak brisket fatback, chuck kielbasa boudin. Ball tip jerky shank meatloaf filet mignon pastrami, corned beef rump tenderloin bresaola pork chop andouille t-bone landjaeger. Short ribs ribeye salami kielbasa, pancetta strip steak swine pork loin ham hock ball tip alcatra.</p>
+        <a href="https://twitter.com/MikeSmithDev/status/588366736195330048"></a>
+    </section>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+    <script>
+        $(function () {
+            $('a', $('#CMSContent')).each(function () {
+                var link = this;
+                var url = $(link).attr('href');
+                var tweetId = url.substring(url.lastIndexOf("/") + 1);
+                if (url.indexOf('https://twitter.com') === 0 && url.indexOf('status') > 0 && !isNaN(tweetId)) {
+                    $.ajax({
+                        url: 'https://api.twitter.com/1/statuses/oembed.json?id=' + tweetId,
+                        crossDomain: true,
+                        dataType: 'jsonp'
+                    })
+                    .done(function (data) {
+                        $(link).after(data.html).remove();
+                    });
+                };
+
+            });
+        });
+    </script>
+</body>
+</html>
